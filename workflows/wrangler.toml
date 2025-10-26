@@ -1,0 +1,6 @@
+name = "edgesec-workflows"
+main = "rollout.ts"
+compatibility_date = "2024-12-01"
+
+[workflows]
+binding = "ROLLOUT_WORKFLOW"

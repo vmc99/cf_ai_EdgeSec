@@ -1,0 +1,62 @@
+name = "edgesec-worker"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Workers AI binding
+[ai]
+binding = "AI"
+
+# Vectorize binding for RAG (remote in dev mode since local not supported)
+[[vectorize]]
+binding = "VECTORIZE"
+index_name = "edgesec-docs"
+remote = true
+
+# Durable Objects
+[[durable_objects.bindings]]
+name = "SECURITY_STATE"
+class_name = "SecurityStateDO"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["SecurityStateDO"]
+
+# KV for summaries
+[[kv_namespaces]]
+binding = "SUMMARIES"
+id = "5ae33ebdcf9446438aa8e8ce88106778"
+preview_id = "a4cca60881c843d9ba5c139461b9939f"
+
+# R2 for log storage (optional - enable R2 in dashboard first)
+# [[r2_buckets]]
+# binding = "LOGS"
+# bucket_name = "edgesec-logs"
+# preview_bucket_name = "edgesec-logs-preview"
+
+# D1 for audit trail
+[[d1_databases]]
+binding = "edgesec_audit"
+database_name = "edgesec-audit"
+database_id = "1a779ba3-72cd-4e73-ab1b-abf97c8cfa59"
+
+# Analytics Engine
+[[analytics_engine_datasets]]
+binding = "ANALYTICS"
+
+# Workflows binding
+[[workflows]]
+binding = "ROLLOUT_WORKFLOW"
+name = "security-rollout"
+class_name = "SecurityRolloutWorkflow"
+
+# Environment variables
+[vars]
+ENVIRONMENT = "development"
+LOG_LEVEL = "debug"
+MAX_CONVERSATION_HISTORY = "20"
+SIMULATION_DURATION_MS = "600000"
+
+# Secrets (use `wrangler secret put` to set these)
+# CF_API_TOKEN
+# CF_ZONE_ID

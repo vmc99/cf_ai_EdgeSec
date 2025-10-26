@@ -1,0 +1,106 @@
+{
+  "name": "propose_waf_rule",
+  "description": "Propose a strictly-templated WAF rule for review or simulation. Rule parameters are bounded for safety.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "pattern": {
+        "type": "string",
+        "enum": [
+          "path_traversal",
+          "sql_injection",
+          "xss",
+          "bot_spike",
+          "ddos",
+          "api_abuse"
+        ],
+        "description": "Attack pattern to mitigate"
+      },
+      "scope": {
+        "type": "string",
+        "enum": ["zone", "hostname", "path"],
+        "description": "Scope of the rule",
+        "default": "zone"
+      },
+      "action": {
+        "type": "string",
+        "enum": ["log", "challenge", "js_challenge", "managed_challenge", "block"],
+        "description": "Action to take (prefer least restrictive first)",
+        "default": "challenge"
+      },
+      "rateLimit": {
+        "type": "integer",
+        "minimum": 10,
+        "maximum": 1000,
+        "description": "Rate limit: requests per 10 seconds per IP (optional)"
+      },
+      "targetPath": {
+        "type": "string",
+        "description": "Specific path pattern to match (optional)"
+      },
+      "targetCountry": {
+        "type": "string",
+        "pattern": "^[A-Z]{2}$",
+        "description": "Target specific country code (optional, use with caution)"
+      },
+      "targetASN": {
+        "type": "string",
+        "pattern": "^AS[0-9]+$",
+        "description": "Target specific ASN (optional, format: AS12345)"
+      },
+      "ttl": {
+        "type": "integer",
+        "minimum": 300,
+        "maximum": 86400,
+        "description": "Time to live in seconds (5min to 24h)",
+        "default": 3600
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 500,
+        "description": "Human-readable reason for this rule (required for audit trail)"
+      }
+    },
+    "required": ["pattern", "action", "reason"]
+  },
+  "safety_guardrails": {
+    "rate_limits": {
+      "minimum": 10,
+      "maximum": 1000,
+      "unit": "requests per 10 seconds"
+    },
+    "allowed_actions": ["log", "challenge", "js_challenge", "managed_challenge", "block"],
+    "approval_required_for": ["block"],
+    "templates_only": true,
+    "bounded_parameters": true
+  },
+  "examples": [
+    {
+      "name": "Block SQL Injection",
+      "input": {
+        "pattern": "sql_injection",
+        "action": "block",
+        "reason": "Blocking active SQL injection attempts from malicious IPs"
+      }
+    },
+    {
+      "name": "Rate Limit API",
+      "input": {
+        "pattern": "api_abuse",
+        "action": "challenge",
+        "targetPath": "/api/search",
+        "rateLimit": 50,
+        "reason": "Protecting search API from abuse"
+      }
+    },
+    {
+      "name": "Challenge Bots",
+      "input": {
+        "pattern": "bot_spike",
+        "action": "managed_challenge",
+        "reason": "High bot traffic detected, requiring verification"
+      }
+    }
+  ]
+}

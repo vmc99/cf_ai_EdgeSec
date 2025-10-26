@@ -1,0 +1,17 @@
+# Example .dev.vars file for local development
+# Copy this to .dev.vars and add your actual values
+
+# Cloudflare API credentials
+CF_API_TOKEN=your_cloudflare_api_token_here
+
+# Optional: Only needed if you want to actually apply WAF rules to a real domain
+# CF_ZONE_ID=your_cloudflare_zone_id_here
+
+# Development settings
+ENVIRONMENT=development
+LOG_LEVEL=debug
+MAX_CONVERSATION_HISTORY=20
+SIMULATION_DURATION_MS=600000
+
+# Optional: For production testing
+# CF_ACCOUNT_ID=your_account_id_here

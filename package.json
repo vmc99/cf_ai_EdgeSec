@@ -1,0 +1,39 @@
+{
+  "name": "edgesec-copilot",
+  "version": "0.1.0",
+  "description": "AI-powered security assistant for Cloudflare",
+  "private": true,
+  "scripts": {
+    "dev:app": "npm run dev --workspace=app",
+    "dev:worker": "npm run dev --workspace=worker",
+    "build:app": "npm run build --workspace=app",
+    "build:worker": "npm run build --workspace=worker",
+    "deploy:app": "npm run deploy --workspace=app",
+    "deploy:worker": "npm run deploy --workspace=worker",
+    "deploy:workflows": "wrangler deploy --config workflows/wrangler.toml",
+    "deploy": "npm run deploy:worker && npm run deploy:workflows && npm run deploy:app",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "workspaces": [
+    "app",
+    "worker"
+  ],
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241205.0",
+    "@types/node": "^22.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "eslint": "^9.16.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8",
+    "wrangler": "^3.88.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
