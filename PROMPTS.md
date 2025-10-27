@@ -58,7 +58,7 @@ Documents embedded:
 3. `ddos_mitigation.md` - DDoS response procedures
 4. Additional security documentation and runbooks
 
-## Development Prompts
+## Development Prompts (github copilot)
 
 ### Feature Implementation Prompts
 
